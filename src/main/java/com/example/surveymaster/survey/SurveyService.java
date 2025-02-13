@@ -71,7 +71,7 @@ public class SurveyService {
             questions.add(question);
         }
 
-        Survey survey = new Survey(null, title, description, "Admin", LocalDateTime.now(), false, questions);
+        Survey survey = new Survey(null, title, description, "Admin", LocalDateTime.now(), true, questions);
 
         System.out.println("Converted Survey: " + survey);
         return survey;
@@ -117,7 +117,8 @@ public class SurveyService {
         if(survey == null){
             return "Survey not found!!";
         }
-        return dao.deleteSurvey(survey);
+        String response = dao.deleteSurvey(survey);
+        return response;
     }   
 
     public void incrementResponseCount(String id){

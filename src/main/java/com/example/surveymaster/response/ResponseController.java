@@ -30,8 +30,18 @@ public class ResponseController {
     }
 
     @GetMapping("survey/{surveyId}")
-    public ResponseEntity<List<Response>> getResponseBySurvey(@PathVariable String surveyId, @RequestParam int page, @RequestParam int size){
-        return ResponseEntity.ok(rs.getResponseBySurvey(surveyId, page, size));
+    public ResponseEntity<List<Response>> getResponseBySurvey(@PathVariable String surveyId, @RequestParam int page, @RequestParam int size, @RequestParam String from, @RequestParam String to){
+        return ResponseEntity.ok(rs.getResponseBySurvey(surveyId, page, size, from, to));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteResponseById(@PathVariable String id) {
+        return ResponseEntity.ok(rs.deleteResponseById(id));
+    }
+
+    @DeleteMapping("survey/{surveyId}")
+    public ResponseEntity<String> deleteAllResponsesOfSurvey(@PathVariable String surveyId){
+        return ResponseEntity.ok(rs.deleteAllResponsesOfSurvey(surveyId));
     }
 
 }

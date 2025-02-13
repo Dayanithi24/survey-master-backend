@@ -4,7 +4,10 @@ import com.example.surveymaster.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -25,11 +28,28 @@ public class ResponseService {
         return dao.getResponseById(id);
     }
 
-    public List<Response> getResponseBySurvey(String surveyId, int page, int size){
+    public List<Response> getAllResponses() {
+        return dao.getAllResponses();
+    }
+
+    public List<Response> getResponseBySurvey(String surveyId, int page, int size, String from, String to) {
+        if (!from.equals("") && !to.equals("")) {
+            LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ISO_DATE);
+            LocalDate toDate = LocalDate.parse(to, DateTimeFormatter.ISO_DATE);
+
+            LocalDateTime fromDateTime = fromDate.atStartOfDay(); // 2025-02-13T00:00:00
+            LocalDateTime toDateTime = toDate.atTime(23, 59, 59);  // 2025-02-15T23:59:59
+
+            return dao.getResponseBySurvey(surveyId, page, size, fromDateTime, toDateTime);
+        }
         return dao.getResponseBySurvey(surveyId, page, size);
     }
 
-    public List<Response> getAllResponses() {
-        return dao.getAllResponses();
+    public String deleteResponseById(String id) {
+        return dao.deleteResponseById(id);
+    }
+
+    public String deleteAllResponsesOfSurvey(String surveyId) {
+        return dao.deleteAllResponsesOfSurvey(surveyId);
     }
 }
