@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:4200"})
 public class SurveyController {
     @Autowired
     private SurveyService ss;

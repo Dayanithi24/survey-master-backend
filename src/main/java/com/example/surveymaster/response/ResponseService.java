@@ -2,9 +2,9 @@ package com.example.surveymaster.response;
 
 import com.example.surveymaster.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +32,7 @@ public class ResponseService {
         return dao.getAllResponses();
     }
 
-    public List<Response> getResponseBySurvey(String surveyId, int page, int size, String from, String to) {
+    public Page<Response> getResponseBySurvey(String surveyId, int page, int size, String from, String to) {
         if (!from.equals("") && !to.equals("")) {
             LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ISO_DATE);
             LocalDate toDate = LocalDate.parse(to, DateTimeFormatter.ISO_DATE);
@@ -52,4 +52,5 @@ public class ResponseService {
     public String deleteAllResponsesOfSurvey(String surveyId) {
         return dao.deleteAllResponsesOfSurvey(surveyId);
     }
+
 }

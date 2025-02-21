@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class SurveyService {
     @Autowired
     private SurveyDao dao;
+    
     public Survey toSurvey(Map<String, Object> requestData){
         System.out.println("Raw Object: " + requestData);
 
@@ -43,18 +44,24 @@ public class SurveyService {
                     question = new CheckboxQuestion(checkOptions);
                     break;
                 case "text":
-                    int minLength = Integer.parseInt((String) questionMap.getOrDefault("minimum_value", "0"));
-                    int maxLength = Integer.parseInt((String) questionMap.getOrDefault("maximum_value", "1000"));
+//                    int minLength = Integer.parseInt((String) questionMap.getOrDefault("minimum_value", "0"));
+//                    int maxLength = Integer.parseInt((String) questionMap.getOrDefault("maximum_value", "1000"));
+                    int minLength = (int) questionMap.getOrDefault("minimum_value", 0);
+                    int maxLength = (int) questionMap.getOrDefault("maximum_value", 1000);
                     question = new TextQuestion(minLength, maxLength);
                     break;
                 case "number":
-                    int minValue = Integer.parseInt((String) questionMap.getOrDefault("minimum_value", "0"));
-                    int maxValue = Integer.parseInt((String) questionMap.getOrDefault("maximum_value", "1000"));
+//                    int minValue = Integer.parseInt((String) questionMap.getOrDefault("minimum_value", "0"));
+//                    int maxValue = Integer.parseInt((String) questionMap.getOrDefault("maximum_value", "1000"));
+                    int minValue = (int) questionMap.getOrDefault("minimum_value", 0);
+                    int maxValue = (int) questionMap.getOrDefault("maximum_value", 1000);
+
                     question = new NumberQuestion(minValue, maxValue);
                     break;
                 case "file":
                     List<String> fileFormats = (List<String>) questionMap.get("file_formats");
-                    int noOfFiles = Integer.parseInt((String) questionMap.getOrDefault("maximum_number_of_files", "1"));
+//                    int noOfFiles = Integer.parseInt((String) questionMap.getOrDefault("maximum_number_of_files", "1"));
+                    int noOfFiles = (int) questionMap.getOrDefault("maximum_number_of_files", 1);
                     String fileSize = (String) questionMap.get("maximum_file_size");
                     question = new FileUploadQuestion(fileFormats, noOfFiles, fileSize);
                     break;

@@ -1,14 +1,15 @@
 package com.example.surveymaster.response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/response")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@RequestMapping("/response/")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:4200"})
 public class ResponseController {
     @Autowired
     private ResponseService rs;
@@ -30,7 +31,7 @@ public class ResponseController {
     }
 
     @GetMapping("survey/{surveyId}")
-    public ResponseEntity<List<Response>> getResponseBySurvey(@PathVariable String surveyId, @RequestParam int page, @RequestParam int size, @RequestParam String from, @RequestParam String to){
+    public ResponseEntity<Page<Response>> getResponseBySurvey(@PathVariable String surveyId, @RequestParam int page, @RequestParam int size, @RequestParam String from, @RequestParam String to){
         return ResponseEntity.ok(rs.getResponseBySurvey(surveyId, page, size, from, to));
     }
 

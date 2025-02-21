@@ -1,9 +1,11 @@
 package com.example.surveymaster.response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -31,17 +33,31 @@ public class ResponseDao {
         return  mt.find(query, Response.class);
     }
 
-    public List<Response> getResponseBySurvey(String id, int page, int size){
-        Query query = new Query(Criteria.where("surveyId").is(id)).with(PageRequest.of(page, size));
-        return  mt.find(query, Response.class);
+    public Page<Response> getResponseBySurvey(String id, int page, int size){
+        Query query = new Query(Criteria.where("surveyId").is(id));
+        long totalCount = mt.count(query, Response.class);
+
+        Pageable pageable = PageRequest.of(page, size);
+        query.with(pageable);
+
+        List<Response> responses = mt.find(query, Response.class);
+
+        return new PageImpl<>(responses, pageable, totalCount);
     }
 
-    public List<Response> getResponseBySurvey(String id, int page, int size, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
-        Criteria criteria = Criteria.where("surveyId").is(id);
-        criteria = criteria.and("respondedAt").gte(fromDateTime).lte(toDateTime);
+    public Page<Response> getResponseBySurvey(String id, int page, int size, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
+        Criteria criteria = Criteria.where("surveyId").is(id)
+                .and("respondedAt").gte(fromDateTime).lte(toDateTime);
 
-        Query query = new Query(criteria).with(PageRequest.of(page, size));
-        return mt.find(query, Response.class);
+        Query query = new Query(criteria);
+        long totalCount = mt.count(query, Response.class);
+
+        Pageable pageable = PageRequest.of(page, size);
+        query.with(pageable);
+
+        List<Response> responses = mt.find(query, Response.class);
+
+        return new PageImpl<>(responses, pageable, totalCount);
     }
 
     public List<Response> getAllResponses() {
@@ -64,4 +80,5 @@ public class ResponseDao {
         }
         return "Deleted Successfully!!";
     }
+
 }
